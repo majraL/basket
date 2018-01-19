@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Basket</title>
+  <link href="https://fonts.googleapis.com/css?family=Raleway:300,500,900&amp;subset=latin-ext" rel="stylesheet">
+  <link rel="stylesheet" href="css/app.css" type='text/css'>
+</head>
+
+<body>
+
+   <header>
+</header>
+
+
+<main>
+
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        
+<div class="header">
+  <div class="header_heading">
+    <h2 class="title -heading">Šuma</h2>
+    <img class="img -basket" src="media/img/kolica.svg" alt="kolica">
+  </div>
+  <div class="header_basket">
+    <a class="link" href="basket.html">
+      <div class="items" data-basket-count></div>
+      <img class="img -basket" src="media/img/basket.svg" alt="basket">
+    </a>
+  </div>
+</div>
+<div class="forest_list" data-forest-items>
+  
+<article id="kruska" class="item -list" data-article>
+  <div class="item_img">
+    <img class="img -item" src="media/img/kruska.jpg" alt="item image" data-article-img>
+  </div>
+  <div class="item_about">
+    <h2 class="title -item">
+      <a class="link -title" href="item.html" data-article-title>Kruška</a>
+    </h2>
+    <p class="item_desc" data-article-desc>Mirisna i sočna kruška daleko je od običnog voća – obilje prirodnih sastojaka s pravom je 
+        stavlja na listu najzdravijih namirnica na svijetu. Kruške pripadaju porodici ruža (Rosaceae) i 
+        srodne su jabukama i dunjama. S obzirom na to da postoji oko tisuću sorti, razlikujemo ih po 
+        veličini, obliku, boji, okusu kao i dužini skladištenja. Dobar su izvor dijetalnih vlakana koja 
+        ljekovito djeluju najprije na zdravlje probavnog, a zatim i kardiovaskularnog sustava.</p>
+  </div>
+  <div class="item_tools">
+    <input id="checkbox1" class="checkbox" type="checkbox" data-article-checkbox>
+    <label for="checkbox1">Uberi</label>
+    <div class="hide">Ubrano</div>
+  </div>
+</article>
+
+  
+<article id="jagoda" class="item -list" data-article>
+  <div class="item_img">
+    <img class="img -item" src="media/img/jagoda.jpg" alt="item image" data-article-img>
+  </div>
+  <div class="item_about">
+    <h2 class="title -item">
+      <a class="link -title" href="item.html" data-article-title>Jagoda</a>
+    </h2>
+    <p class="item_desc" data-article-desc>Ako postoji voće neodoljivog izgleda, ugodnog mirisa i zanosnog okusa, koje je ujedno i 
+        nadasve zdravo pa čak i ljekovito, onda je to nesumnjivo jagoda. Jagode pripadaju porodici Rosaceae 
+        (ruže), koje na dugačkoj peteljci imaju po tri nazupčena lista. To bobičasto voće prepuno je 
+        iznenađenja. Tako, vjerovali ili ne, među brojnim vrstama jagoda postoje čak i žute, koje se drže 
+        osobitim specijalitetom, i čiji se plodovi ubiru sve do jeseni. Zanimljivo je spomenuti i da su 
+        jagode jedino voće čije sjemenke nisu skrivene unutar ploda, nego se nalaze izvana.</p>
+  </div>
+  <div class="item_tools">
+    <input id="checkbox2" class="checkbox" type="checkbox" data-article-checkbox>
+    <label for="checkbox2">Uberi</label>
+    <div class="hide">Ubrano</div>
+  </div>
+</article>
+
+  
+<article id="jabuka" class="item -list" data-article>
+  <div class="item_img">
+    <img class="img -item" src="media/img/jabuka.jpg" alt="item image" data-article-img>
+  </div>
+  <div class="item_about">
+    <h2 class="title -item">
+      <a class="link -title" href="item.html" data-article-title>Jabuka</a>
+    </h2>
+    <p class="item_desc" data-article-desc>Vjerujete li da je jabuka na naš jelovnik stigla ravno iz raja? Da je ona simbol  požude, 
+        ljubavi i vječne mladosti? Ovi epiteti odražavaju ljudsko divljenje prema tom voću. Već su stari 
+        Kelti smatrali da jabuka ima čudotvorna svojstva i da onaj tko uspije pojesti jabuku iz čarobnog vrta 
+        neće više nikad biti ni gladan, ni žedan, ni bolestan niti će ikad  ostarjeti. Naravno, u svakoj 
+        bajci ima istine.</p>
+  </div>
+  <div class="item_tools">
+    <input id="checkbox3" class="checkbox" type="checkbox" data-article-checkbox>
+    <label for="checkbox3">Uberi</label>
+    <div class="hide">Ubrano</div>
+  </div>
+</article>
+
+</div>
+
+      </div>
+    </div>
+  </div>
+
+</main>
+<script>
+
+  var cl = console.log;
+  var cd = console.dir;
+
+  var items = document.querySelectorAll('[data-article]');
+  var listOfItems = document.querySelector('[data-forest-items]');
+  var itemsCheckbox = listOfItems.querySelectorAll('[data-checkbox]');
+  var basketCountContainer = document.querySelector('[data-basket-count]');
+  var basketCount = 0;
+  var itemsChecked = JSON.parse(localStorage.getItem('items')) || [];
+
+  listOfItems.addEventListener('click', updateBasket);
+
+  checkStorage(itemsChecked);
+
+  function checkStorage(items) {
+    if (!items.length) return;
+    items.forEach(item => {
+      updateDOM(item);
+    })
+  }
+
+  function validateCheckbox(e) {
+    return e.target.nodeName === 'INPUT' && e.target.attributes.getNamedItem('data-article-checkbox');
+  }
+
+  function setArticleObject(e) {
+    // get article
+    var articleTag = e.path.find(item => item.attributes.getNamedItem('data-article'));
+
+    // get article elements
+    var article_title = articleTag.querySelector('[data-article-title]').textContent;
+    var article_img = articleTag.querySelector('[data-article-img]').currentSrc;
+    var article_desc = articleTag.querySelector('[data-article-desc]').textContent;
+    var article_checkbox = e.target.id;
+
+    // return/set object
+    return {
+      id: articleTag.id,
+      title: article_title,
+      desc: article_desc,
+      img: article_img,
+      checkbox: {
+        id: article_checkbox,
+        checked: true
+      },
+      count: 1
+    }
+  }
+
+  function updateStorage(article) {
+    itemsChecked.push(article);
+    localStorage.setItem('items', JSON.stringify(itemsChecked));
+  }
+
+  function updateDOM(article) {
+    var checkbox = article.checkbox;
+
+    if (checkbox.checked) {
+      // add count to basket icon
+      basketCount++;
+      basketCountContainer.classList.add('-active'); // show
+      basketCountContainer.innerHTML = basketCount; // set count
+      // remove Uberi, add Ubrano
+      var checkboxDOM = document.querySelector('#' + article.checkbox.id);
+      checkboxDOM.labels[0].nextElementSibling.classList.remove('hide');
+      checkboxDOM.labels[0].classList.add('hide');
+      checkboxDOM.parentNode.parentNode.classList.add('-added'); // jebiga
+    }
+  }
+
+  function updateBasket(e) {
+    if (validateCheckbox(e)) {
+      var article = setArticleObject(e);
+      updateStorage(article);
+      updateDOM(article);
+    }
+  }
+
+</script> <footer>
+</footer>
+ 
+
+</body>
+
+</html>
