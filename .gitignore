@@ -1,7 +1,6 @@
 node_modules/
 .nvmrc
-.gulpfile.js
-package-lock.json
-package.json
+gulpfile.js
+*.json
 *.log
 src/
