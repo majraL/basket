@@ -11,239 +11,218 @@
 
 <body>
 
-   <header>
-</header>
- 
+  <header>
+  </header>
 
-<main>
 
-  <div class="container">
-    <div class="row">
-      <div class="col">
+  <main>
 
-        <article class="basket">
+    <div class="container">
+      <div class="row">
+        <div class="col">
 
-          <header class="header">
-            <a class="back" href="index.html">
-              <img class="img -back" src="../media/img/back.png" alt="arrow left">
-            </a>
-            <div class="header_heading">
-              <h2 class="title -heading">Košara</h2>
-              <img class="img -basket" src="media/img/basket.svg" alt="basket">
-            </div>
-            <div class="header_content">
-              <div class="delete" data-delete-basket>
-                <span>sve baci</span>
-                <img class="img -deleteAll" src="media/img/delete.svg" alt="delete">
+          <article class="basket">
+
+            <header class="header">
+              <a class="back" href="index.html">
+                <img class="img -back" src="../media/img/back.png" alt="arrow left">
+              </a>
+              <div class="header_heading">
+                <h2 class="title -heading">Košara</h2>
+                <img class="img -basket" src="media/img/basket.svg" alt="basket">
               </div>
+              <div class="header_content">
+                <div class="delete" data-delete-basket>
+                  <span>sve baci</span>
+                  <img class="img -deleteAll" src="media/img/delete.svg" alt="delete">
+                </div>
+              </div>
+            </header>
+
+            <div class="content">
+              <table class="table" data-table>
+                <tbody></tbody>
+              </table>
             </div>
-          </header>
 
-          <div class="content">
-            <table class="table" data-table>
-              <tbody>
-                <!-- <tr class="table_row" data-table-row>
-                  <td class="table_data" data-table-img>
-                    <img class="img -item" src="media/img/jabuka.jpg" alt="item image">
-                  </td>
-                  <td class="table_data">
-                    <h2 class="title -item">
-                      <a class="link -title" href="item.html"></a>
-                    </h2>
-                    <p class="item_desc"></p>
-                  </td>
-                  <td class="table_data -tools" data-table-tools>
-                    <div class="item_delete">
-                      <img class="img -deleteItem" src="media/img/close.svg" alt="X">
-                    </div>
-                    <div class="item_count">
-                      <div>br</div>
-                      <span>-</span>
-                      <span>+</span>
-                    </div>
-                  </td>
-                </tr> -->
-              </tbody>
-            </table>
-          </div>
+            <footer class="footer">
+              <div class="basket_total">
+                <div class="title -total">Ukupno:</div>
+                <div class="basket_totalItems" data-total></div>
+              </div>
+              <div class="basket_go">
+                <a class="link -go" href="bakica.html">bjež' kod bakice!</a>
+              </div>
+            </footer>
 
-          <footer class="footer">
-            <div class="basket_total">
-              <div class="title -total">Ukupno:</div>
-              <div class="basket_totalItems" data-total></div>
-            </div>
-            <div class="basket_go">
-              <a class="link -go" href="bakica.html">bjež' kod bakice!</a>
-            </div>
-          </footer>
+          </article>
 
-        </article>
+        </div>
+      </div>
+    </div>
 
+  </main>
+  <div id="modal" class="modal">
+    <div class="modal_body">
+      <div class="title -total">E</div>
+      <div class="modal_text">Sve nazad u šumu?</div>
+      <div class="modal_btns" data-modalBtns>
+        <button class="modal_link" data-modalBtns="-">Ne</button>
+        <button class="modal_link" data-modalBtns="+">Da</button>
+      </div>
+      <div class="modal_close">
+        <button class="close" onclick="closeModal()">X</button>
       </div>
     </div>
   </div>
+  <div id="superTajnaPizdarija"></div>
+  <audio id="zvuk" src="../media/sound/scream.mp3"></audio>
+  <script>
 
-</main>
-<div id="modal" class="modal">
-  <div class="modal_body">
-    <div class="title -total">E</div>
-    <div class="modal_text">Sve nazad u šumu?</div>
-    <div class="modal_btns" data-modalBtns>
-      <button class="modal_link" data-modalBtns="-">Ne</button>
-      <button class="modal_link" data-modalBtns="+">Da</button>
-    </div>
-    <div class="modal_close">
-      <button class="close" onclick="closeModal()">X</button>
-    </div>
-  </div>
-</div>
-<div id="superTajnaPizdarija"></div>
-<audio id="zvuk" src="../media/sound/scream.mp3"></audio>
-<script>
+    var cl = console.log;
+    var cd = console.dir;
 
-  var cl = console.log;
-  var cd = console.dir;
+    var table = document.querySelector('[data-table]');
+    var total = document.querySelector('[data-total]');
+    var deleteBasket = document.querySelector('[data-delete-basket]');
+    var basketItems = JSON.parse(localStorage.getItem('items')) || '';
+    var modal = document.querySelector('#modal');
+    var modalBtns = document.querySelector('[data-modalBtns]');
 
-  var table = document.querySelector('[data-table]');
-  var total = document.querySelector('[data-total]');
-  var deleteBasket = document.querySelector('[data-delete-basket]');
-  var basketItems = JSON.parse(localStorage.getItem('items')) || '';
-  var modal = document.querySelector('#modal');
-  var modalBtns = document.querySelector('[data-modalBtns]');
-
-  // još napravit count item-a
-  function checkBtns(e) {
-    if (e.target.dataset.modalbtns === '-') {
+    // još napravit count item-a
+    function checkBtns(e) {
+      if (e.target.dataset.modalbtns === '-') {
+        closeModal();
+        return;
+      }
+      deleteAllBasket();
       closeModal();
-      return;
-    }
-    deleteAllBasket();
-    closeModal();
-  }
-
-  modalBtns.addEventListener('click', checkBtns);
-
-  function closeModal() {
-    modal.classList.remove('-active');
-  }
-
-  function deleteAllBasket() {
-    table.innerHTML = 'Kaco kaco šta smo rekli, ubacit prvo nešto u košaricu';
-    table.classList.remove('-active');
-    basketItems = [];
-    localStorage.removeItem('items');
-    total.innerHTML = basketItems.length;
-  }
-
-  function showModal(e) {
-    if (!basketItems) return;
-    modal.classList.add('-active');
-  }
-
-  deleteBasket.addEventListener('click', showModal);
-  populateBasket(basketItems);
-
-  function updateBasket(e) {
-
-    var row = e.path.find(item => item.attributes.getNamedItem('data-table-row'));
-
-    if (e.target.attributes.getNamedItem('data-delete-item')) {
-      row.remove();
-      var index = basketItems.findIndex(el => el.id === row.id);
-      basketItems.splice(index, 1);
-      localStorage.setItem('items', JSON.stringify(basketItems));
-      total.innerHTML = basketItems.length;
-      table.classList.remove('-active');
-      if (!basketItems.length) table.innerHTML = 'Kaco kaco šta smo rekli, ubacit prvo nešto u košaricu';
     }
 
-  }
+    modalBtns.addEventListener('click', checkBtns);
 
-  table.addEventListener('click', updateBasket);
+    function closeModal() {
+      modal.classList.remove('-active');
+    }
 
-  function populateBasket(items) {
-
-    if (!items.length) {
+    function deleteAllBasket() {
       table.innerHTML = 'Kaco kaco šta smo rekli, ubacit prvo nešto u košaricu';
-    } else {
-      total.innerHTML = items.length;
-      table.classList.add('-active');
-      table.innerHTML = items.map(item => {
-        return '<tr id="' + item.id + '" class="table_row" data-table-row>' +
-          '<td class="table_data">' +
-          '<img class="img -item" src="' + item.img + '" alt="item image">' +
-          '</td>' +
-          '<td class="table_data">' +
-          '<h2 class="title -item">' +
-          '<a class="link -title" href="item.html">' + item.title + '</a>' +
-          '</h2>' +
-          '<p class="item_desc">' + item.desc + '</p>' +
-          '</td>' +
-          '<td class="table_data -tools">' +
-          '<div class="item_delete">' +
-          '<img class="img -deleteItem" src="media/img/close.svg" alt="X" data-delete-item>' +
-          '</div>' +
-          '<div class="item_count" data-count-parent>' +
-          '<div id="itemCount">' + item.count + '</div>' +
-          '<span data-count="-">-</span>' +
-          '<span data-count="+">+</span>' +
-          '</div>' +
-          '</td>' +
-          '</tr>';
-      }).join('');
-
-      collectCounts();
-
+      table.classList.remove('-active');
+      basketItems = [];
+      localStorage.removeItem('items');
+      total.innerHTML = basketItems.length;
     }
 
-    function collectCounts() {
-
-      var countItem = document.querySelectorAll('[data-count-parent]');
-
-      countItem.forEach(item => {
-        item.addEventListener('click', updateCount);
-      });
-
+    function showModal(e) {
+      if (!basketItems) return;
+      modal.classList.add('-active');
     }
 
-    function updateCount(e) {
+    deleteBasket.addEventListener('click', showModal);
+    populateBasket(basketItems);
 
-      var tableRow = e.path.find(item => item.attributes.getNamedItem('data-table-row'));
-      var tableRowCount = e.path.find(item => item.attributes.getNamedItem('data-count-parent'));
-      var index = basketItems.findIndex(el => el.id === tableRow.id);
-      var itemCount = tableRowCount.children['itemCount'];
+    function updateBasket(e) {
 
-      if (e.target.dataset.count === "+") {
-        basketItems[index].count++;
+      var row = e.path.find(item => item.attributes.getNamedItem('data-table-row'));
+
+      if (e.target.attributes.getNamedItem('data-delete-item')) {
+        row.remove();
+        var index = basketItems.findIndex(el => el.id === row.id);
+        basketItems.splice(index, 1);
         localStorage.setItem('items', JSON.stringify(basketItems));
-        itemCount.innerHTML = basketItems[index].count;
+        total.innerHTML = basketItems.length;
+        table.classList.remove('-active');
+        if (!basketItems.length) table.innerHTML = 'Kaco kaco šta smo rekli, ubacit prvo nešto u košaricu';
       }
 
-      if (e.target.dataset.count === "-") {
-        basketItems[index].count--;
-        if (!basketItems[index].count) {
-          posaljiGauKurac();
-          basketItems[index].count;
-          return;
+    }
+
+    table.addEventListener('click', updateBasket);
+
+    function populateBasket(items) {
+
+      if (!items.length) {
+        table.innerHTML = 'Kaco kaco šta smo rekli, ubacit prvo nešto u košaricu';
+      } else {
+        total.innerHTML = items.length;
+        table.classList.add('-active');
+        table.innerHTML = items.map(item => {
+          return '<tr id="' + item.id + '" class="table_row" data-table-row>' +
+            '<td class="table_data">' +
+            '<img class="img -item" src="' + item.img + '" alt="item image">' +
+            '</td>' +
+            '<td class="table_data">' +
+            '<h2 class="title -item">' +
+            '<a class="link -title" href="item.html">' + item.title + '</a>' +
+            '</h2>' +
+            '<p class="item_desc">' + item.desc + '</p>' +
+            '</td>' +
+            '<td class="table_data -tools">' +
+            '<div class="item_delete">' +
+            '<img class="img -deleteItem" src="media/img/close.svg" alt="X" data-delete-item>' +
+            '</div>' +
+            '<div class="item_count" data-count-parent>' +
+            '<div id="itemCount">' + item.count + '</div>' +
+            '<span data-count="-">-</span>' +
+            '<span data-count="+">+</span>' +
+            '</div>' +
+            '</td>' +
+            '</tr>';
+        }).join('');
+
+        collectCounts();
+
+      }
+
+      function collectCounts() {
+
+        var countItem = document.querySelectorAll('[data-count-parent]');
+
+        countItem.forEach(item => {
+          item.addEventListener('click', updateCount);
+        });
+
+      }
+
+      function updateCount(e) {
+
+        var tableRow = e.path.find(item => item.attributes.getNamedItem('data-table-row'));
+        var tableRowCount = e.path.find(item => item.attributes.getNamedItem('data-count-parent'));
+        var index = basketItems.findIndex(el => el.id === tableRow.id);
+        var itemCount = tableRowCount.children['itemCount'];
+
+        if (e.target.dataset.count === "+") {
+          basketItems[index].count++;
+          localStorage.setItem('items', JSON.stringify(basketItems));
+          itemCount.innerHTML = basketItems[index].count;
         }
-        localStorage.setItem('items', JSON.stringify(basketItems));
-        itemCount.innerHTML = basketItems[index].count;
+
+        if (e.target.dataset.count === "-") {
+          basketItems[index].count--;
+          if (!basketItems[index].count) {
+            posaljiGauKurac();
+            basketItems[index].count;
+            return;
+          }
+          localStorage.setItem('items', JSON.stringify(basketItems));
+          itemCount.innerHTML = basketItems[index].count;
+        }
       }
+
+      // pizdarija
+      var kakoKAKO = document.querySelector('#superTajnaPizdarija');
+      var vrisak = document.querySelector('#zvuk');
+      function posaljiGauKurac() {
+        vrisak.play();
+        kakoKAKO.style.display = 'block';
+      }
+
     }
 
-    // pizdarija
-    var kakoKAKO = document.querySelector('#superTajnaPizdarija');
-    var vrisak = document.querySelector('#zvuk');
-    function posaljiGauKurac() {
-      vrisak.play();
-      kakoKAKO.style.display = 'block';
-    }
+  </script>
+  <footer>
+  </footer>
 
-  }
-
-</script> <footer>
-</footer>
- 
 
 </body>
 
