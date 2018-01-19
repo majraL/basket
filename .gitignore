@@ -1,6 +1,7 @@
-# Node
 node_modules/
+.nvmrc
+.gulpfile.js
+package-lock.json
+package.json
 *.log
-
-# Source file
 src/
